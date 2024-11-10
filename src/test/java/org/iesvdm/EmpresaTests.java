@@ -55,15 +55,7 @@ class EmpresaTests {
         var listEmps = empRepo.findAll();
         System.out.println("Lista de códigos de los departamentos de los Empleados que no se repiten\n");
 
-        listEmps.stream()
-                .map(Empleado::getDepartamento)
-                .filter(e -> {
-                    var aux = false;
-                    if (e != null) if (e.getEmpleados().size() == 1) aux = true;
-                    return aux;
-                })
-                .distinct()
-                .forEach(e -> System.out.println(">>"+e.getEmpleados()+":"+"\n>>>> Código: " + e.getCodigo()));
+        listEmps.forEach(e -> { if (e.getDepartamento() != null && e.getDepartamento().getEmpleados().size() == 1) System.out.println(">>" + e + ":\n>>>>" + e.getDepartamento().getCodigo()); });
     }
 
     /**
@@ -75,31 +67,20 @@ class EmpresaTests {
         var listEmp = empRepo.findAll();
         System.out.println("Nombre y Apellidos de los Empleados en Mayúscula\n");
 
-        listEmp.stream()
-                .sorted(comparing(e -> {
-                    var aux = "";
-                    if (e.getApellido2() != null) aux = e.getApellido2();
-                    return aux;
-                }))
-                .skip(2)
-                .sorted(comparing(Empleado::getCodigo))
-                .forEach(e -> System.out.println(">>" + e + ":\n" + ">>>>"
-                        + e.getNombre().toUpperCase() + " " + e.getApellido1().toUpperCase() + " " + e.getApellido2().toUpperCase()));
+        listEmp.forEach(e -> { if (e.getApellido2() != null)
+            System.out.println(">>" + e + ":\n>>>>" + e.getNombre().toUpperCase() + " " + e.getApellido1().toUpperCase() + " " + e.getApellido2().toUpperCase()); });
     }
 
     /**
      * 3. Lista el código de los empleados junto al nif, pero el nif deberá aparecer en dos columnas, 
      * una mostrará únicamente los dígitos del nif y la otra la letra.
      */
-
     @Test
     void test3() {
         var listEmp = empRepo.findAll();
         System.out.println("Código y Nif (Separado) de los Empleados\n");
 
-        listEmp.forEach(e ->
-                System.out.println(">>" + e + ":\n" + ">>>>" + e.getCodigo() + " -> "
-                        + e.getNif().substring(0, e.getNif().length() - 1)  +" - " + e.getNif().substring(e.getNif().length() - 1)));
+        listEmp.forEach(e -> System.out.println(">>" + e + ":\n>>>>" + e.getCodigo() + " -> " + e.getNif().substring(0, e.getNif().length() - 1)  + " - " + e.getNif().substring(e.getNif().length() - 1)));
     }
 
     /**
@@ -112,10 +93,8 @@ class EmpresaTests {
         var listDep = depRepo.findAll();
         System.out.println("Nombre y Valor del Presupuesto Actual de cada Departamento\n");
 
-        listDep.forEach(d -> {
-            var valuePresupuesto = d.getPresupuesto()-d.getGastos();
-            if (valuePresupuesto >= 0) System.out.println(">>" + d + ":\n" + ">>>>" + d.getNombre() + " " + valuePresupuesto); });
-     }
+        listDep.forEach(d -> { if (d.getPresupuesto() - d.getGastos() >= 0) System.out.println(">>" + d + ":\n" + ">>>>" + d.getNombre() + " -> " + (d.getPresupuesto() - d.getGastos())); });
+    }
 
     /**
      * 5. Lista el nombre de los departamentos y el valor del presupuesto actual ordenado de forma ascendente.
@@ -127,7 +106,7 @@ class EmpresaTests {
 
         listDep.stream()
                 .sorted(comparing(Departamento::getPresupuesto))
-                .forEach(d -> System.out.println(">>" + d + ":\n" + ">>>>" + " Nombre: " + d.getNombre() + ", Presupuesto: " + d.getPresupuesto()));
+                .forEach(d -> System.out.println(">>" + d + ":\n>>>>" + d.getNombre() + " -> " + d.getPresupuesto()));
      }
 
     /**
@@ -141,7 +120,7 @@ class EmpresaTests {
         listDep.stream()
                 .sorted(comparing(Departamento::getPresupuesto, reverseOrder()))
                 .limit(3)
-                .forEach(d -> System.out.println(">>" + d + ":\n" + ">>>>" + " Nombre: " + d.getNombre() + ", Presupuesto: " + d.getPresupuesto()));
+                .forEach(d -> System.out.println(">>" + d + ":\n>>>>" + d.getNombre() + " -> " + d.getPresupuesto()));
      }
 
     /**
@@ -152,9 +131,7 @@ class EmpresaTests {
         var listDep = depRepo.findAll();
         System.out.println("Nombre y Presupuesto de los Departamentos con Presupuesto entre 100000 y 200000 euros\n");
 
-        listDep.stream()
-                .filter(p -> p.getPresupuesto() >= 100000 && p.getPresupuesto() <= 200000)
-                .forEach(d -> System.out.println(">>" + d + ":\n" + ">>>>" + " Nombre: " + d.getNombre() + ", Presupuesto: " + d.getPresupuesto()));
+        listDep.forEach(d -> { if (d.getPresupuesto() >= 100000 && d.getPresupuesto() <= 200000) System.out.println(">>" + d + ":\n>>>>" + d.getNombre() + " -> " + d.getPresupuesto()); });
      }
 
     /**
@@ -183,9 +160,8 @@ class EmpresaTests {
 
         listDep.stream().
                 sorted(comparing(Departamento::getGastos, reverseOrder()))
-                .filter(d -> d.getGastos() < 5000)
-                .forEach(d -> System.out.println(">>" + d + ":\n" + ">>>>" + " Nombre: " + d.getNombre() + ", Gastos: " + d.getGastos()));
-     }
+                .forEach(d -> { if (d.getGastos() < 5000) System.out.println(">>" + d + ":\n>>>>" + d.getNombre() + " -> " + d.getGastos()); });
+    }
 
     /**
      * 10. Lista todos los datos de los empleados cuyo segundo apellido sea Díaz o Moreno
@@ -196,15 +172,7 @@ class EmpresaTests {
         System.out.println("Lista todos los datos de los Empleados con segundo apellido Díaz o Moreno\n");
 
         Set<String> apellidos = Set.of("Díaz", "Moreno");
-        listEmp.stream()
-                .sorted(comparing(p -> {
-                    String aux = "";
-                    if (p.getApellido2() != null) aux = p.getApellido2();
-                    return aux;
-                }))
-                .skip(2)
-                .filter(p -> apellidos.contains(p.getApellido2()))
-                .forEach(x -> System.out.println(">>" + x + ":"));
+        listEmp.forEach(e -> { if (e.getApellido2() != null && apellidos.contains(e.getApellido2())) System.out.println(">>" + e + ":"); });
     }
 
     /**
@@ -214,22 +182,10 @@ class EmpresaTests {
     void test11() {
         var listEmp = empRepo.findAll();
         System.out.println("Lista de nombres, apellidos y nif de los empleados con código 2, 4 o 5\n");
-        Set<Integer> codigos = Set.of(2, 4, 5);
 
-        listEmp.stream()
-                .sorted(comparing(e -> {
-                    var aux = "";
-                    if (e.getApellido2() != null) aux = e.getApellido2();
-                    return aux;
-                }))
-                .skip(2)
-                .sorted(comparing(Empleado::getCodigo))
-                .filter(e -> {
-                    boolean aux2 = false;
-                    if (e.getDepartamento() != null) if (codigos.contains(e.getDepartamento().getCodigo())) aux2 = true;
-                    return aux2;
-                })
-                .forEach(e -> System.out.println(">>" + e + ":\n>>>>" + e.getNombre() + " " + e.getApellido1() + " " + e.getApellido2() + " " + e.getNif()));
+        Set<Integer> codigos = Set.of(2, 4, 5);
+        listEmp.forEach(e -> { if (e.getDepartamento() != null && codigos.contains(e.getDepartamento().getCodigo()))
+            System.out.println(">>" + e + ":\n>>>>" + e.getNombre() + " " + e.getApellido1() + " " + e.getApellido2() + " " + e.getNif()); });
     }
 
     /**
@@ -240,13 +196,7 @@ class EmpresaTests {
         var listEmp = empRepo.findAll();
         System.out.println("Nombre del Departamento trabaja Nif 38382980M\n");
 
-        listEmp.stream()
-                .filter(e -> {
-                    boolean aux = false;
-                    if (e.getDepartamento() != null) if (e.getNif().equals("38382980M")) aux = true;
-                    return aux;
-                })
-                .forEach(e -> System.out.println(">>" + e + ":\n>>>>" + e.getDepartamento().getNombre()));
+        listEmp.forEach(e -> { if (e.getDepartamento() != null && e.getNif().equals("38382980M")) System.out.println(">>" + e + ":\n>>>>" + e.getDepartamento().getNombre()); });
     }
 
     /**
@@ -258,13 +208,8 @@ class EmpresaTests {
         var listEmp = empRepo.findAll();
         System.out.println("Nombre Empleados con Departamentos sin Presupuesto Entre 100000 y 200000\n");
 
-        listEmp.stream()
-                .filter(e -> {
-                    boolean aux = false;
-                    if (e.getDepartamento() != null) if (e.getDepartamento().getPresupuesto() < 100000 || e.getDepartamento().getPresupuesto() > 200000) aux = true;
-                    return aux;
-                })
-                .forEach(e -> System.out.println(">>" + e + ":\n>>>>" + e.getNombre()));
+        listEmp.forEach(e -> { if (e.getDepartamento() != null && (e.getDepartamento().getPresupuesto() < 100000 || e.getDepartamento().getPresupuesto() > 200000))
+            System.out.println(">>" + e + ":\n>>>>" + e.getNombre()); });
     }
 
     /**
@@ -300,9 +245,7 @@ class EmpresaTests {
         var listDep = depRepo.findAll();
         System.out.println("Total de empleados en cada departamento con presupuesto mayor a 200000\n");
 
-        listDep.stream()
-                .filter(d -> d.getPresupuesto() > 200000)
-                .forEach(d -> System.out.println(">>" + d + ":\n>>>>" + d.getEmpleados().size()));
+        listDep.forEach(d -> { if (d.getPresupuesto() > 200000) System.out.println(">>" + d + ":\n>>>>" + d.getEmpleados().size()); });
      }
 
     /**
@@ -315,9 +258,7 @@ class EmpresaTests {
         var listDep = depRepo.findAll();
         System.out.println("Nombre de los departamentos con más de 2 Empleados\n");
 
-        listDep.stream()
-                .filter(d -> d.getEmpleados().size() > 2)
-                .forEach(d -> System.out.println(">>" + d + ":\n>>>>" + d.getNombre() + " - " + d.getEmpleados().size()));
+        listDep.forEach(d -> { if (d.getEmpleados().size() > 2) System.out.println(">>" + d + ":\n>>>>" + d.getNombre() + " - " + d.getEmpleados().size()); });
      }
 
     /** 18. Lista todos los nombres de departamentos junto con los nombres y apellidos de los empleados. 
