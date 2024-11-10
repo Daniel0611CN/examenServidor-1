@@ -78,15 +78,13 @@ class EmpresaTests {
         listEmp.stream()
                 .sorted(comparing(e -> {
                     var aux = "";
-                    if (e.getApellido2() != null) {
-                        aux = e.getApellido2();
-                        return aux;
-                    }
+                    if (e.getApellido2() != null) aux = e.getApellido2();
                     return aux;
                 }))
                 .skip(2)
                 .sorted(comparing(Empleado::getCodigo))
-                .forEach(e -> System.out.println(">>" + e + ":\n" + ">>>>" + e.getNombre().toUpperCase() + " " + e.getApellido1().toUpperCase() + " " + e.getApellido2().toUpperCase()));
+                .forEach(e -> System.out.println(">>" + e + ":\n" + ">>>>"
+                        + e.getNombre().toUpperCase() + " " + e.getApellido1().toUpperCase() + " " + e.getApellido2().toUpperCase()));
     }
 
     /**
@@ -100,7 +98,8 @@ class EmpresaTests {
         System.out.println("Código y Nif (Separado) de los Empleados\n");
 
         listEmp.forEach(e ->
-                System.out.println(">>" + e + ":\n" + ">>>>" + e.getCodigo() + " -> " + e.getNif().substring(0, e.getNif().length() - 1)  +" - " + e.getNif().substring(e.getNif().length() - 1)));
+                System.out.println(">>" + e + ":\n" + ">>>>" + e.getCodigo() + " -> "
+                        + e.getNif().substring(0, e.getNif().length() - 1)  +" - " + e.getNif().substring(e.getNif().length() - 1)));
     }
 
     /**
@@ -111,10 +110,11 @@ class EmpresaTests {
     @Test
     void test4() {
         var listDep = depRepo.findAll();
-        System.out.println("Nombre y Valor del Presupuesto Actual de cada Departamentos\n");
+        System.out.println("Nombre y Valor del Presupuesto Actual de cada Departamento\n");
 
         listDep.forEach(d -> {
-            var valuePresupuesto = d.getPresupuesto()-d.getGastos(); if (valuePresupuesto >= 0) System.out.println(">>" + d + ":\n" + ">>>>" + d.getNombre() + " " + valuePresupuesto); });
+            var valuePresupuesto = d.getPresupuesto()-d.getGastos();
+            if (valuePresupuesto >= 0) System.out.println(">>" + d + ":\n" + ">>>>" + d.getNombre() + " " + valuePresupuesto); });
      }
 
     /**
@@ -163,8 +163,7 @@ class EmpresaTests {
     @Test
     void test8() {
         var listEmp = empRepo.findAll();
-
-        System.out.println("Lista con 5 filas a partir de la 3 por código empleado");
+        System.out.println("Lista con 5 filas a partir de la 3 por código empleado\n");
 
         listEmp.stream()
                 .sorted(comparing(Empleado::getCodigo))
@@ -180,6 +179,7 @@ class EmpresaTests {
     @Test
     void test9() {
         var listDep = depRepo.findAll();
+        System.out.println("Nombres de los Departamentos y Gasto Menor de 5000\n");
 
         listDep.stream().
                 sorted(comparing(Departamento::getGastos, reverseOrder()))
@@ -199,7 +199,7 @@ class EmpresaTests {
         listEmp.stream()
                 .sorted(comparing(p -> {
                     String aux = "";
-                    if (p.getApellido2() != null) { aux = p.getApellido2(); return aux; }
+                    if (p.getApellido2() != null) aux = p.getApellido2();
                     return aux;
                 }))
                 .skip(2)
@@ -275,7 +275,8 @@ class EmpresaTests {
         var listDep = depRepo.findAll();
         System.out.println("Valor mínimo del presupuesto de los departamentos\n");
 
-        System.out.println(">>" + listDep.stream().min(comparing(Departamento::getPresupuesto)) + ":\n>>>>" + listDep.stream().min(comparing(Departamento::getPresupuesto)).map(Departamento::getPresupuesto));
+        System.out.println(">>" + listDep.stream().min(comparing(Departamento::getPresupuesto))
+                + ":\n>>>>" + listDep.stream().min(comparing(Departamento::getPresupuesto)).map(Departamento::getPresupuesto));
      }
 
     /**
@@ -339,7 +340,8 @@ class EmpresaTests {
         var listDep = depRepo.findAll();
         System.out.println("Media de empleados que trabajan en los Departamentos\n");
 
-        System.out.println(">>>>" + listDep.stream().mapToDouble(d -> d.getEmpleados().size()).average());
+        System.out.println(">>>>" + listDep.stream()
+                .mapToDouble(d -> d.getEmpleados().size()).average());
    }
 
     /**
