@@ -193,7 +193,9 @@ class EmpresaTests {
     @Test
     void test10() {
         var listEmp = empRepo.findAll();
+        System.out.println("Lista todos los datos de los Empleados con segundo apellido Díaz o Moreno\n");
 
+        Set<String> apellidos = Set.of("Díaz", "Moreno");
         listEmp.stream()
                 .sorted(comparing(p -> {
                     String aux = "";
@@ -201,11 +203,7 @@ class EmpresaTests {
                     return aux;
                 }))
                 .skip(2)
-                .filter(p -> {
-                    boolean aux2 = false;
-                    if (p.getApellido2() != null) { if (p.getApellido2().equals("Díaz") || p.getApellido2().equals("Moreno")) { aux2 = true; return aux2; } }
-                    return aux2;
-                })
+                .filter(p -> apellidos.contains(p.getApellido2()))
                 .forEach(x -> System.out.println(">>" + x + ":"));
     }
 
