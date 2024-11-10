@@ -52,13 +52,18 @@ class EmpresaTests {
      */
     @Test
     void test1() {
+        var listEmps = empRepo.findAll();
+        System.out.println("Lista de códigos de los departamentos de los Empleados que no se repiten\n");
 
-        var listEmp = empRepo.findAll();
-
-
-        listEmp.forEach(System.out::println);
-
-
+        listEmps.stream()
+                .map(Empleado::getDepartamento)
+                .filter(e -> {
+                    var aux = false;
+                    if (e != null) if (e.getEmpleados().size() == 1) aux = true;
+                    return aux;
+                })
+                .distinct()
+                .forEach(e -> System.out.println(">>"+e.getEmpleados()+":"+"\n>>>> Código: " + e.getCodigo()));
     }
 
     /**
@@ -67,13 +72,21 @@ class EmpresaTests {
      */
     @Test
     void test2() {
-
         var listEmp = empRepo.findAll();
+        System.out.println("Nombre y Apellidos de los Empleados en Mayúscula\n");
 
-
-        listEmp.forEach(System.out::println);
-
-
+        listEmp.stream()
+                .sorted(comparing(e -> {
+                    var aux = "";
+                    if (e.getApellido2() != null) {
+                        aux = e.getApellido2();
+                        return aux;
+                    }
+                    return aux;
+                }))
+                .skip(2)
+                .sorted(comparing(Empleado::getCodigo))
+                .forEach(e -> System.out.println(">>" + e + ":\n" + ">>>>" + e.getNombre().toUpperCase() + " " + e.getApellido1().toUpperCase() + " " + e.getApellido2().toUpperCase()));
     }
 
     /**
@@ -83,13 +96,11 @@ class EmpresaTests {
 
     @Test
     void test3() {
-
         var listEmp = empRepo.findAll();
+        System.out.println("Código y Nif (Separado) de los Empleados\n");
 
-
-        listEmp.forEach(System.out::println);
-
-
+        listEmp.forEach(e ->
+                System.out.println(">>" + e + ":\n" + ">>>>" + e.getCodigo() + " -> " + e.getNif().substring(0, e.getNif().length() - 1)  +" - " + e.getNif().substring(e.getNif().length() - 1)));
     }
 
     /**
@@ -97,49 +108,53 @@ class EmpresaTests {
      * Para calcular este dato tendrá que restar al valor del presupuesto inicial (columna presupuesto) los gastos que se han generado (columna gastos).
      *  Tenga en cuenta que en algunos casos pueden existir valores negativos.
      */
+    @Test
     void test4() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Nombre y Valor del Presupuesto Actual de cada Departamentos\n");
 
-
-        listDep.forEach(System.out::println);
-
+        listDep.forEach(d -> {
+            var valuePresupuesto = d.getPresupuesto()-d.getGastos(); if (valuePresupuesto >= 0) System.out.println(">>" + d + ":\n" + ">>>>" + d.getNombre() + " " + valuePresupuesto); });
      }
 
     /**
      * 5. Lista el nombre de los departamentos y el valor del presupuesto actual ordenado de forma ascendente.
      */
+    @Test
     void test5() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Nombres y Presupuesto de los Departamentos de forma Ascendente\n");
 
-
-        listDep.forEach(System.out::println);
-
+        listDep.stream()
+                .sorted(comparing(Departamento::getPresupuesto))
+                .forEach(d -> System.out.println(">>" + d + ":\n" + ">>>>" + " Nombre: " + d.getNombre() + ", Presupuesto: " + d.getPresupuesto()));
      }
 
     /**
      * 6. Devuelve una lista con el nombre y el presupuesto, de los 3 departamentos que tienen mayor presupuesto
      */
+    @Test
     void test6() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Nombre y Presupuesto de los 3 Departamentos con mayor Presupuesto\n");
 
-
-        listDep.forEach(System.out::println);
-
+        listDep.stream()
+                .sorted(comparing(Departamento::getPresupuesto, reverseOrder()))
+                .limit(3)
+                .forEach(d -> System.out.println(">>" + d + ":\n" + ">>>>" + " Nombre: " + d.getNombre() + ", Presupuesto: " + d.getPresupuesto()));
      }
 
     /**
      * 7. Devuelve una lista con el nombre de los departamentos y el presupesto, de aquellos que tienen un presupuesto entre 100000 y 200000 euros
      */
+    @Test
     void test7() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Nombre y Presupuesto de los Departamentos con Presupuesto entre 100000 y 200000 euros\n");
 
-
-        listDep.forEach(System.out::println);
-
+        listDep.stream()
+                .filter(p -> p.getPresupuesto() >= 100000 && p.getPresupuesto() <= 200000)
+                .forEach(d -> System.out.println(">>" + d + ":\n" + ">>>>" + " Nombre: " + d.getNombre() + ", Presupuesto: " + d.getPresupuesto()));
      }
 
     /**
@@ -147,26 +162,29 @@ class EmpresaTests {
      */
     @Test
     void test8() {
-
         var listEmp = empRepo.findAll();
 
+        System.out.println("Lista con 5 filas a partir de la 3 por código empleado");
 
-        listEmp.forEach(System.out::println);
-
-
+        listEmp.stream()
+                .sorted(comparing(Empleado::getCodigo))
+                .skip(2)
+                .limit(5)
+                .forEach(e -> System.out.println(">>" + e + ":"));
     }
 
     /**
      * 9. Devuelve una lista con el nombre de los departamentos y el gasto, de aquellos que tienen menos de 5000 euros de gastos.
      * Ordenada de mayor a menor gasto.
      */
+    @Test
     void test9() {
-
         var listDep = depRepo.findAll();
 
-
-        listDep.forEach(System.out::println);
-
+        listDep.stream().
+                sorted(comparing(Departamento::getGastos, reverseOrder()))
+                .filter(d -> d.getGastos() < 5000)
+                .forEach(d -> System.out.println(">>" + d + ":\n" + ">>>>" + " Nombre: " + d.getNombre() + ", Gastos: " + d.getGastos()));
      }
 
     /**
@@ -174,14 +192,21 @@ class EmpresaTests {
      */
     @Test
     void test10() {
-
         var listEmp = empRepo.findAll();
 
-
-
-        listEmp.forEach(System.out::println);
-
-
+        listEmp.stream()
+                .sorted(comparing(p -> {
+                    String aux = "";
+                    if (p.getApellido2() != null) { aux = p.getApellido2(); return aux; }
+                    return aux;
+                }))
+                .skip(2)
+                .filter(p -> {
+                    boolean aux2 = false;
+                    if (p.getApellido2() != null) { if (p.getApellido2().equals("Díaz") || p.getApellido2().equals("Moreno")) { aux2 = true; return aux2; } }
+                    return aux2;
+                })
+                .forEach(x -> System.out.println(">>" + x + ":"));
     }
 
     /**
@@ -189,29 +214,41 @@ class EmpresaTests {
      */
     @Test
     void test11() {
-
         var listEmp = empRepo.findAll();
+        System.out.println("Lista de nombres, apellidos y nif de los empleados con código 2, 4 o 5\n");
+        Set<Integer> codigos = Set.of(2, 4, 5);
 
-
-
-        listEmp.forEach(System.out::println);
-
-
+        listEmp.stream()
+                .sorted(comparing(e -> {
+                    var aux = "";
+                    if (e.getApellido2() != null) aux = e.getApellido2();
+                    return aux;
+                }))
+                .skip(2)
+                .sorted(comparing(Empleado::getCodigo))
+                .filter(e -> {
+                    boolean aux2 = false;
+                    if (e.getDepartamento() != null) if (codigos.contains(e.getDepartamento().getCodigo())) aux2 = true;
+                    return aux2;
+                })
+                .forEach(e -> System.out.println(">>" + e + ":\n>>>>" + e.getNombre() + " " + e.getApellido1() + " " + e.getApellido2() + " " + e.getNif()));
     }
-
 
     /**
      * 12. Devuelve el nombre del departamento donde trabaja el empleado que tiene el nif 38382980M
      */
     @Test
     void test12() {
-
         var listEmp = empRepo.findAll();
+        System.out.println("Nombre del Departamento trabaja Nif 38382980M\n");
 
-
-
-        listEmp.forEach(System.out::println);
-
+        listEmp.stream()
+                .filter(e -> {
+                    boolean aux = false;
+                    if (e.getDepartamento() != null) if (e.getNif().equals("38382980M")) aux = true;
+                    return aux;
+                })
+                .forEach(e -> System.out.println(">>" + e + ":\n>>>>" + e.getDepartamento().getNombre()));
     }
 
     /**
@@ -220,25 +257,27 @@ class EmpresaTests {
      */
     @Test
     void test13() {
-
         var listEmp = empRepo.findAll();
+        System.out.println("Nombre Empleados con Departamentos sin Presupuesto Entre 100000 y 200000\n");
 
-
-
-        listEmp.forEach(System.out::println);
-
+        listEmp.stream()
+                .filter(e -> {
+                    boolean aux = false;
+                    if (e.getDepartamento() != null) if (e.getDepartamento().getPresupuesto() < 100000 || e.getDepartamento().getPresupuesto() > 200000) aux = true;
+                    return aux;
+                })
+                .forEach(e -> System.out.println(">>" + e + ":\n>>>>" + e.getNombre()));
     }
 
     /**
      * 14. Calcula el valor mínimo del presupuesto de todos los departamentos.
      */
+    @Test
     void test14() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Valor mínimo del presupuesto de los departamentos\n");
 
-
-        listDep.forEach(System.out::println);
-
+        System.out.println(">>" + listDep.stream().min(comparing(Departamento::getPresupuesto)) + ":\n>>>>" + listDep.stream().min(comparing(Departamento::getPresupuesto)).map(Departamento::getPresupuesto));
      }
 
     /**
@@ -246,25 +285,25 @@ class EmpresaTests {
      * Tienes que devolver dos columnas, una con el nombre del departamento 
      * y otra con el número de empleados que tiene asignados.
      */
+    @Test
     void test15() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Número de empleados en cada departamento\n");
 
-
-        listDep.forEach(System.out::println);
-
+        listDep.forEach(d -> System.out.println(">>" + d + ":\n>>>>" + d.getNombre() + " -> " + d.getEmpleados().size()));
      }
 
     /**
      * 16. Calcula el número total de empleados que trabajan en cada unos de los departamentos que tienen un presupuesto mayor a 200000 euros.
      */
+    @Test
     void test16() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Total de empleados en cada departamento con presupuesto mayor a 200000\n");
 
-
-        listDep.forEach(System.out::println);
-
+        listDep.stream()
+                .filter(d -> d.getPresupuesto() > 200000)
+                .forEach(d -> System.out.println(">>" + d + ":\n>>>>" + d.getEmpleados().size()));
      }
 
     /**
@@ -272,50 +311,52 @@ class EmpresaTests {
      * El resultado debe tener dos columnas, una con el nombre del departamento y
      *  otra con el número de empleados que tiene asignados
      */
+    @Test
     void test17() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Nombre de los departamentos con más de 2 Empleados\n");
 
-
-        listDep.forEach(System.out::println);
-
+        listDep.stream()
+                .filter(d -> d.getEmpleados().size() > 2)
+                .forEach(d -> System.out.println(">>" + d + ":\n>>>>" + d.getNombre() + " - " + d.getEmpleados().size()));
      }
 
     /** 18. Lista todos los nombres de departamentos junto con los nombres y apellidos de los empleados. 
      *
      */
+    @Test
     void test18() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Nombres de departamentos y Nombres y Apellidos de Empleados\n");
 
-
-        listDep.forEach(System.out::println);
-
+        listDep.forEach(d -> System.out.println(">>" + d + ":\n>>>>" + d.getNombre() + ", " + d.getEmpleados().stream()
+                .map(e -> e.getNombre() + " " +  e.getApellido1() + " " + e.getApellido2()).toList()));
      }
 
     /**
      * 19. Devuelve la media de empleados que trabajan en los departamentos
      */
+     @Test
     void test19() {
-
         var listDep = depRepo.findAll();
+        System.out.println("Media de empleados que trabajan en los Departamentos\n");
 
-
-        listDep.forEach(System.out::println);
-
+        System.out.println(">>>>" + listDep.stream().mapToDouble(d -> d.getEmpleados().size()).average());
    }
 
     /**
      * 20. Calcula el presupuesto máximo, mínimo  y número total de departamentos con un solo stream.
      */
+    @Test
     void test20() {
-        
         var listDep = depRepo.findAll();
+        System.out.println("Presupuesto máximo, mínimo y total de departamentos en un solo stream\n");
 
-        //
-
-        listDep.forEach(System.out::println);
-
+        System.out.println(Arrays.toString(listDep.stream()
+                                .map(p -> new Double[]{p.getPresupuesto(), p.getPresupuesto(), 1.0})
+                                .reduce((doubles, doubles2) -> new Double[]{
+                                        Math.max(doubles[0], doubles2[0]), Math.min(doubles[1], doubles2[1]), doubles[2] + doubles2[2]})
+                                .orElse(new Double[]{})));
     }
 
 }
