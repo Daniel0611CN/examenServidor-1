@@ -1,13 +1,16 @@
 package org.iesvdm.ej2;
 
 import lombok.Data;
-
 import java.util.*;
 
 @Data
 public class BiMap<K, V> {
 
     private Map<K, V> mapa = new HashMap<>();
+
+    public BiMap(Map<K, V> mapa) {
+        this.mapa = mapa;
+    }
 
     public void put(K key, V value) {
         if (!mapa.containsValue(value)) {
