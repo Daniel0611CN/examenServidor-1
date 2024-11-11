@@ -40,8 +40,7 @@ class EmpresaTests {
         listEmps.forEach( e -> {
             System.out.println(">>"+e+":"+"\nEmpleados mismo departamento "+ e.getDepartamento());
             var dep = e.getDepartamento();
-            if ( dep != null)
-                dep.getEmpleados().forEach(eD -> System.out.println(">>>>"+eD));
+            if (dep != null) dep.getEmpleados().forEach(eD -> System.out.println(">>>>"+eD));
         });
 
     }
