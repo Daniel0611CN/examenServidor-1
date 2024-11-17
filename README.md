@@ -7,7 +7,19 @@
 
 <h2 style="text-align: center; color: #3498db; font-size: 1.3em;">Duración: 2 horas | Entrega: ZIP</h2>
 
-<h3 style="color: #4CAF50; font-size: 1.5em;">Ejercicio 1: <a href="#ejercicio1" style="text-decoration: none; color: #3498db;">Clase UtilEstadistica</a></h3>
+<!-- Índice de ejercicios -->
+<h3 style="font-size: 1.5em; color: #4CAF50;">Índice de Ejercicios:</h3>
+<ul style="font-size: 1.2em; color: #555; padding-left: 20px;">
+<li><a href="#ejercicio1" style="color: #3498db; text-decoration: none;">Ejercicio 1: Clase UtilEstadistica</a></li>
+<li><a href="#ejercicio2" style="color: #3498db; text-decoration: none;">Ejercicio 2: Implementación de BiMap</a></li>
+<li><a href="#ejercicio3" style="color: #3498db; text-decoration: none;">Ejercicio 3: Clase Login con Anotaciones</a></li>
+<li><a href="#ejercicio4" style="color: #3498db; text-decoration: none;">Ejercicio 4: Pruebas con la API de Streams de Java 8</a></li>
+</ul>
+
+<hr>
+
+<!-- Ejercicio 1 -->
+<h3 id="ejercicio1" style="color: #4CAF50; font-size: 1.5em;">Ejercicio 1: <a href="#ejercicio1" style="text-decoration: none; color: #3498db;">Clase UtilEstadistica</a></h3>
 <div style="background-color: #ecf0f1; padding: 15px; border-radius: 8px; margin: 10px 0;">
 <p style="font-size: 1em; color: #555; line-height: 1.6;">
     Implementa la clase <code>UtilEstadistica</code> que contiene el método estático:
@@ -22,7 +34,8 @@
 </p>
 </div>
 
-<h3 style="color: #4CAF50; font-size: 1.5em;">Ejercicio 2: <a href="#ejercicio2" style="text-decoration: none; color: #3498db;">Implementación de BiMap</a></h3>
+<!-- Ejercicio 2 -->
+<h3 id="ejercicio2" style="color: #4CAF50; font-size: 1.5em;">Ejercicio 2: <a href="#ejercicio2" style="text-decoration: none; color: #3498db;">Implementación de BiMap</a></h3>
 <div style="background-color: #ecf0f1; padding: 15px; border-radius: 8px; margin: 10px 0;">
 <p style="font-size: 1em; color: #555; line-height: 1.6;">
     Desarrolla la clase genérica <code>BiMap&lt;K, V&gt;</code> que permita almacenar pares clave-valor de manera bidireccional.
@@ -39,7 +52,8 @@
 </p>
 </div>
 
-<h3 style="color: #4CAF50; font-size: 1.5em;">Ejercicio 3: <a href="#ejercicio3" style="text-decoration: none; color: #3498db;">Clase Login con Anotaciones</a></h3>
+<!-- Ejercicio 3 -->
+<h3 id="ejercicio3" style="color: #4CAF50; font-size: 1.5em;">Ejercicio 3: <a href="#ejercicio3" style="text-decoration: none; color: #3498db;">Clase Login con Anotaciones</a></h3>
 <div style="background-color: #ecf0f1; padding: 15px; border-radius: 8px; margin: 10px 0;">
 <p style="font-size: 1em; color: #555; line-height: 1.6;">
     Implementa la clase <code>Login</code> que utilizará anotaciones para gestionar los usuarios autorizados. 
@@ -54,7 +68,8 @@
 </p>
 </div>
 
-<h3 style="color: #4CAF50; font-size: 1.5em;">Ejercicio 4: <a href="#ejercicio4" style="text-decoration: none; color: #3498db;">Pruebas con la API de Streams de Java 8</a></h3>
+<!-- Ejercicio 4 -->
+<h3 id="ejercicio4" style="color: #4CAF50; font-size: 1.5em;">Ejercicio 4: <a href="#ejercicio4" style="text-decoration: none; color: #3498db;">Pruebas con la API de Streams de Java 8</a></h3>
 <div style="background-color: #ecf0f1; padding: 15px; border-radius: 8px; margin: 10px 0;">
 <p style="font-size: 1em; color: #555; line-height: 1.6;">
     Resuelve las pruebas proporcionadas para la API de Streams de Java 8. El objetivo es realizar un análisis y filtrado
